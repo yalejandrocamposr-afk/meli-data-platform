@@ -91,7 +91,7 @@ def process_batch(batch_messages):
     # Guardar analitycs
     sales_by_category.write \
         .format("bigquery") \
-        .option("table", "meli-data-platform.meli_pipeline.sales_by_category") \
+        .option("table", "meli-data-platform.meli_analytics.sales_by_category") \
         .option("temporaryGcsBucket", "meli-data-platform-temp") \
         .mode("append") \
         .save()

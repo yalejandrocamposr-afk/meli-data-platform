@@ -2,7 +2,7 @@ services:
 
   spark:
     build:
-      context: ..
+      context: .
       dockerfile: ./docker/Dockerfile
     container_name: spark-streaming
 
