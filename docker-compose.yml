@@ -3,11 +3,11 @@ services:
   spark:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/Dockerfile.spark
     container_name: spark-streaming
 
     volumes:
-      - ../:/app
+      - ./:/app
       - C:\Users\user\AppData\Roaming\gcloud:/root/.config/gcloud
 
     environment:
@@ -36,3 +36,24 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=/opt/airflow/creds/gcp-creds.json
 
     command: airflow standalone
+
+
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.api
+    container_name: meli-api
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./:/app
+      - C:\Users\user\AppData\Roaming\gcloud\application_default_credentials.json:/app/creds/gcp-creds.json
+
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/creds/gcp-creds.json
+
+    depends_on:
+      - spark
+      - airflow
