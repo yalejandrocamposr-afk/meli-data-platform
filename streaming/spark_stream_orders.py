@@ -1,6 +1,5 @@
 import json
 import time
-from datetime import datetime
 
 from google.cloud import pubsub_v1
 from pyspark.sql import SparkSession
@@ -71,11 +70,25 @@ logger.info("Listening for messages...")
 
 def process_batch(batch_messages):
 
+    start_time = time.time() # Medición tiempo de ingesta - Inicio
+
     logger.info(f"Processing batch with {len(batch_messages)} records")
 
     # Convertir lista de eventos en DataFrame de Spark
     df = spark.createDataFrame(batch_messages)
+    
+    original_count = df.count() # Conteo de registros crudos
+    
     df = validate_orders(df)
+
+    valid_count = df.count() # Conteo de registros validos 
+    invalid_count = original_count - valid_count # Conteo de registros invalidos
+
+    logger.info(f"Valid records: {valid_count}")
+    logger.info(f"Invalid records removed: {invalid_count}")
+
+    processing_time = round(time.time() - start_time, 2) # Medición tiempo de ingesta - Final
+    logger.info(f"Batch processing time: {processing_time} seconds")
 
     # Calcular valor total de cada orden
     df = df.withColumn(
