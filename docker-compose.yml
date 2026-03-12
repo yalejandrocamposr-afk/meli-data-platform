@@ -12,6 +12,7 @@ services:
 
     environment:
       - GOOGLE_CLOUD_PROJECT=meli-data-platform
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
 
     working_dir: /app
     command: tail -f /dev/null # el contenedor no hace nada solo se queda vivo esperando comandos, airflow entra con el comando docker exc spark-streaming
@@ -25,11 +26,13 @@ services:
       - "8081:8080"
 
     volumes:
-      - ../airflow/dags:/opt/airflow/dags
-      - C:\Users\user\AppData\Roaming\gcloud:/root/.config/gcloud
+      - ./airflow/dags:/opt/airflow/dags
+      - ./models:/opt/airflow/models
+      - C:\Users\user\AppData\Roaming\gcloud\application_default_credentials.json:/opt/airflow/creds/gcp-creds.json
       - /var/run/docker.sock:/var/run/docker.sock
 
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - GOOGLE_APPLICATION_CREDENTIALS=/opt/airflow/creds/gcp-creds.json
 
     command: airflow standalone
