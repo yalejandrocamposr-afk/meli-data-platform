@@ -1,8 +1,10 @@
 import json
 import time
+from datetime import datetime
+
+from google.cloud import pubsub_v1
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, current_timestamp, from_utc_timestamp
-from google.cloud import pubsub_v1
 
 project_id = "meli-data-platform"
 subscription_id = "spark-orders-subscription"
@@ -52,6 +54,9 @@ subscriber.subscribe(subscription_path, callback=callback)
 print("Listening for messages...")
 
 def process_batch(batch_messages):
+
+    print(f"Processing batch with {len(batch_messages)} records")
+
     # Convertir lista de eventos en DataFrame de Spark
     df = spark.createDataFrame(batch_messages)
 
@@ -83,7 +88,7 @@ def process_batch(batch_messages):
 
     sales_by_category.show()
 
-    # Escribir resultado de transformación BigQuery usando GCS como staging
+    # Guardar analitycs
     sales_by_category.write \
         .format("bigquery") \
         .option("table", "meli-data-platform.meli_pipeline.sales_by_category") \
