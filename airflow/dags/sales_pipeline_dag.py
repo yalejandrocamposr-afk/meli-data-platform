@@ -13,7 +13,7 @@ with DAG(
     default_args=default_args
 ) as dag:
 
-# Cada que corre genera en BQ una analtica de categorias vendidas del día.
+# Cada que corre genera en BQ una analtica de categorias vendidas del día. 
     run_analytics_model = BashOperator(
         task_id="run_sales_analytics",
         bash_command="""
