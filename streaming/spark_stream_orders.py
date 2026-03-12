@@ -6,6 +6,12 @@ from google.cloud import pubsub_v1
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, current_timestamp, from_utc_timestamp
 
+from utils.logger import get_logger
+
+logger = get_logger("spark-stream")
+
+logger.info("Starting streaming job")
+
 project_id = "meli-data-platform"
 subscription_id = "spark-orders-subscription"
 
