@@ -51,20 +51,31 @@ def callback(message):
     data = json.loads(message.data.decode("utf-8"))
     messages.append(data)
     # confirmar consumo del mensaje
+    logger.info("Received new event from Pub/Sub")
     message.ack()  
 
 # Cada vez que llegue un mensaje ejecutar callback
 subscriber.subscribe(subscription_path, callback=callback) 
 
 
-print("Listening for messages...")
+# Calidad de datos
+def validate_orders(df):
+
+    df = df.dropna(subset=["order_id"])
+    df = df.filter("price > 0")
+    df = df.dropDuplicates(["order_id"])
+    return df
+
+
+logger.info("Listening for messages...")
 
 def process_batch(batch_messages):
 
-    print(f"Processing batch with {len(batch_messages)} records")
+    logger.info(f"Processing batch with {len(batch_messages)} records")
 
     # Convertir lista de eventos en DataFrame de Spark
     df = spark.createDataFrame(batch_messages)
+    df = validate_orders(df)
 
     # Calcular valor total de cada orden
     df = df.withColumn(
@@ -72,6 +83,7 @@ def process_batch(batch_messages):
         col("price") * col("quantity")
     )
 
+    logger.info("Writing RAW events table orders_stream")
     # Guardar RAW events
     df.write \
         .format("bigquery") \
@@ -92,8 +104,7 @@ def process_batch(batch_messages):
         from_utc_timestamp(current_timestamp(), "America/Bogota")
 )
 
-    sales_by_category.show()
-
+    logger.info("Writing analytics table sales_by_category")
     # Guardar analitycs
     sales_by_category.write \
         .format("bigquery") \
@@ -106,7 +117,7 @@ def process_batch(batch_messages):
 # Loop continuo que procesa eventos cada cierto intervalo (micro-batch)
 while True:
 
-    print("Collecting events for batch...")
+    logger.info("Collecting events for next micro-batch")
 
     time.sleep(30)  # ventana de micro-batch (30 segundos)
 
@@ -116,4 +127,4 @@ while True:
 
         process_batch(batch)
     else:
-        print("No events received in this batch.")
+        logger.info("No events received in this batch.")
