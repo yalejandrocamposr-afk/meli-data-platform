@@ -3,6 +3,10 @@ import time
 import random
 from faker import Faker
 from google.cloud import pubsub_v1
+from datetime import datetime
+import pytz
+
+bogota = pytz.timezone("America/Bogota")
 
 project_id = "meli-data-platform"
 topic_id = "meli-orders-topic"
@@ -29,7 +33,7 @@ def generate_order():
         "category": random.choice(categories),
         "price": round(random.uniform(10, 500), 2),
         "quantity": random.randint(1, 3),
-        "timestamp": fake.iso8601()
+        "event_time": datetime.now(bogota).isoformat()
     }
 
     return order
