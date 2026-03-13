@@ -8,7 +8,9 @@ ejecuta transformaciones analíticas con Airflow y expone métricas mediante una
 
 ## Arquitectura
 
-Event Generator → Pub/Sub → Spark Streaming → BigQuery RAW → Airflow SQL Models → BigQuery Analytics → FastAPI API
+<p align="center">
+  <img src="docs/meli_data_platform_architecture.png" width="400"/>
+</p>
 
 ## Tecnologías utilizadas
 
@@ -45,13 +47,9 @@ GET /top-categories
 
 Devuelve las categorías con mayor volumen de ventas.
 
-## Ejecutar el proyecto
+## Capturas del proyecto
 
-docker compose up --build
 
-Luego abrir:
-
-http://localhost:8000/docs
 
 ## Habilidades demostradas
 
