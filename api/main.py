@@ -7,4 +7,14 @@ app = FastAPI(
     version="1.0"
 )
 
-app.include_router(sales.router)
+# health check endpoint
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+app.include_router(
+    sales.router,
+    prefix="/analytics",
+    tags=["analytics"]
+)
+

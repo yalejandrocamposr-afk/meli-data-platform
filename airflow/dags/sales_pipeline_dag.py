@@ -1,32 +1,30 @@
 from airflow import DAG
-from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobOperator # type: ignore
+from airflow.operators.bash import BashOperator # type: ignore
 from datetime import datetime
 
-with open("/opt/airflow/models/sales_by_category_hourly.sql") as f:
-    SALES_QUERY = f.read()
-
 default_args = {
-    "start_date": datetime(2024, 1, 1),
-    "retries": 2
+    "start_date": datetime(2024, 1, 1)
 }
 
 with DAG(
-    dag_id="meli_sales_pipeline",
+    "meli_sales_pipeline",
     schedule_interval="@hourly",
     catchup=False,
-    default_args=default_args,
-    tags=["meli","analytics"]
+    default_args=default_args
 ) as dag:
-    
-    # Cada hora que corre genera en BQ una analtica de categorias vendidas. 
-    run_sales_analytics = BigQueryInsertJobOperator( 
+
+# Cada que corre genera en BQ una analtica de categorias vendidas del día. 
+    run_analytics_model = BashOperator(
         task_id="run_sales_analytics",
-        project_id="meli-data-platform",
-        configuration={
-            "query": {
-                "query": SALES_QUERY,
-                "useLegacySql": False
-            }
-        },
-        location="US"
+        bash_command="""
+        bq query --use_legacy_sql=false '
+        CREATE OR REPLACE TABLE `meli-data-platform.meli_analytics.sales_by_category_hourly` AS
+        SELECT
+            category,
+            SUM(total_value) as total_sales
+        FROM `meli-data-platform.meli_raw.orders`
+        WHERE DATE(event_time) = CURRENT_DATE()
+        GROUP BY category
+        '
+        """
     )
