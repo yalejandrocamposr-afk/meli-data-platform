@@ -25,11 +25,13 @@ ejecuta transformaciones analíticas con Airflow y expone métricas mediante una
 ## Flujo del pipeline
 
 1. Generación de eventos sintéticos de órdenes.
+
 2. Publicación de eventos en Pub/Sub.
 
 <p align="center">
   <img src="docs/1.png" width="1000"/>
 </p>
+
 
 3. Consumo y procesamiento con Spark Streaming (micro-batches).
 
@@ -37,7 +39,9 @@ ejecuta transformaciones analíticas con Airflow y expone métricas mediante una
   <img src="docs/2.png" width="1000"/>
 </p>
 
+
 4. Validación de calidad de datos.
+
 5. Almacenamiento en BigQuery RAW.
 
 <p align="center">
@@ -48,15 +52,17 @@ ejecuta transformaciones analíticas con Airflow y expone métricas mediante una
   <img src="docs/4.png" width="1000"/>
 </p>
 
+
 6. Transformaciones analíticas orquestadas con Airflow.
 
 <p align="center">
-  <img src="docs/6.png" width="1000"/>
+  <img src="docs/5.png" width="1000"/>
 </p>
 
 <p align="center">
-  <img src="docs/6.png" width="1000"/>
+  <img src="docs/5.png" width="1000"/>
 </p>
+
 
 7. Exposición de datos analíticos mediante FastAPI.
 
