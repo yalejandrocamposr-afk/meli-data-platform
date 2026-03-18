@@ -26,11 +26,44 @@ ejecuta transformaciones analíticas con Airflow y expone métricas mediante una
 
 1. Generación de eventos sintéticos de órdenes.
 2. Publicación de eventos en Pub/Sub.
+
+<p align="center">
+  <img src="docs/1.png" width="1000"/>
+</p>
+
 3. Consumo y procesamiento con Spark Streaming (micro-batches).
+
+<p align="center">
+  <img src="docs/2.png" width="1000"/>
+</p>
+
 4. Validación de calidad de datos.
 5. Almacenamiento en BigQuery RAW.
+
+<p align="center">
+  <img src="docs/3.png" width="1000"/>
+</p>
+
+<p align="center">
+  <img src="docs/4.png" width="1000"/>
+</p>
+
 6. Transformaciones analíticas orquestadas con Airflow.
+
+<p align="center">
+  <img src="docs/6.png" width="1000"/>
+</p>
+
+<p align="center">
+  <img src="docs/6.png" width="1000"/>
+</p>
+
 7. Exposición de datos analíticos mediante FastAPI.
+
+<p align="center">
+  <img src="docs/7.png" width="1000"/>
+</p>
+
 
 ## Endpoints
 
@@ -46,10 +79,6 @@ Respuesta:
 GET /top-categories
 
 Devuelve las categorías con mayor volumen de ventas.
-
-## Capturas del proyecto
-
-
 
 ## Habilidades demostradas
 
