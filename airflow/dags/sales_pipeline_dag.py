@@ -23,7 +23,7 @@ with DAG(
                 SELECT
                     category,
                     SUM(total_value) AS total_sales
-                FROM `meli-data-platform.meli_raw.orders_streams`
+                FROM `meli-data-platform.meli_raw.orders_stream`
                 WHERE DATE(event_time) = CURRENT_DATE()
                 GROUP BY category
                 """,
