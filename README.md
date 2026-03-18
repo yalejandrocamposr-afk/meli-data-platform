@@ -56,11 +56,7 @@ ejecuta transformaciones analíticas con Airflow y expone métricas mediante una
 6. Transformaciones analíticas orquestadas con Airflow.
 
 <p align="center">
-  <img src="docs/5.png" width="1000"/>
-</p>
-
-<p align="center">
-  <img src="docs/5.png" width="1000"/>
+  <img src="docs/6.png" width="1000"/>
 </p>
 
 
